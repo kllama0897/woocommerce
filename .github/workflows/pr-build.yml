@@ -42,7 +42,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Init DB and WP
-        run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
+        run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}  
+
+      - name: Run tests
+        run: bash tests/bin/phpunit.sh
 
       #      - name: Download ZIP
 #        uses: actions/download-artifact@v2
