@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
 #        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
-        php: [ '7.0' ]
+        php: [ '7.1' ]
         wp: [ "latest" ]
     services:
       database:
@@ -40,16 +40,30 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Disable XDebug for performance increase
+        run: |
+             if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
+                phpenv config-rm xdebug.ini
+            else
+                echo "xdebug.ini does not exist"
+            fi
+
+#      - name: Get cached composer directories
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#                ./packages
+#                ./vendor
+#          key: ${{ runner.os }}-${{ hashFiles('./composer.lock') }}
+
+      - name: Setup and install composer
+        run: |
+             curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=1.10.16
+             composer install
 
       - name: Init DB and WP
         run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
-          
-      - name: Setup and install composer
-        uses: php-actions/composer@v5
-        with:
-          php_version: 7.2
-          version: 2
 
       - name: Run tests
         run: ./vendor/bin/phpunit -c ./phpunit.xml
-
