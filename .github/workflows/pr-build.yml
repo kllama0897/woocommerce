@@ -51,7 +51,5 @@ jobs:
           version: 2
 
       - name: Run tests
-        uses: php-actions/phpunit@v2
-        with:
-          configuration: ./phpunit.xml
-          php_version: ${{ matrix.php }}
+        run: ./vendor/bin/phpunit -c ./phpunit.xml
+
