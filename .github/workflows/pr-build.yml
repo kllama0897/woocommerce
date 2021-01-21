@@ -21,7 +21,7 @@ jobs:
 #          retention-days: 7
   test:
     name: PHP ${{ matrix.php }} unit tests
-    needs: build
+#    needs: build
     timeout-minutes: 15
     runs-on: ubuntu-latest
     strategy:
