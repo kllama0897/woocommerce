@@ -19,58 +19,39 @@ jobs:
 #          name: woocommerce.zip
 #          path: ${{ steps.build.outputs.zip_path }}
 #          retention-days: 7
-  build-dev:
-    name: Composer build for running unit tests
+
+  test:
+    name: PHP ${{ matrix.php }} WP ${{ matrix.wp }} unit tests
+    timeout-minutes: 15
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+#        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
+        php: [ '7.0' ]
+        wp: [ "latest" ]
+    services:
+      database:
+        image: mysql:5.6
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
+      - name: Init DB and WP
+        run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
+          
       - name: Setup and install composer
         uses: php-actions/composer@v5
         with:
           php_version: 7.2
           version: 2
 
-      - name: Upload dev build
-        uses: actions/upload-artifact@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run tests
+        uses: php-actions/phpunit@v2
         with:
-          name: woocommerce-dev
-          retention-days: 1
-          path: ./
-#          
-#  test:
-#    name: PHP ${{ matrix.php }} WP ${{ matrix.wp }} unit tests
-#    needs: build-dev
-#    timeout-minutes: 15
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
-#        php: [ '7.0' ]
-#        wp: [ "latest" ]
-#    services:
-#      database:
-#        image: mysql:5.6
-#        env:
-#          MYSQL_ROOT_PASSWORD: root
-#        ports:
-#          - 3306:3306
-#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v2
-#
-#      - name: Init DB and WP
-#        run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
-#
-#      - name: Install WooCommerce from build step
-#        run: curl -s 
-#
-#      - name: Run tests
-#        uses: php-actions/phpunit@v2
-#        with:
-#          configuration: ./phpunit.xml
-#          php_version: ${{ matrix.php }}
+          configuration: ./phpunit.xml
+          php_version: ${{ matrix.php }}
