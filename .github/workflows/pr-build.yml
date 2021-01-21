@@ -34,10 +34,11 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
-    uses: actions/download-artifact@v2
-    with:
-      name: woocommerce.zip
     steps:
+      - name: Download ZIP
+        uses: actions/download-artifact@v2
+        with:
+          name: woocommerce.zip
       - name: Download WooCommcerce ZIP
         uses: actions/download-artifact@v2
         with:
