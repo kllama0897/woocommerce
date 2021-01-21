@@ -59,8 +59,8 @@ jobs:
 
       - name: Setup and install composer
         run: |
-             curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version=1.10.16
-             composer install
+             curl -sS https://getcomposer.org/installer | php -- --install-dir=./ --filename=composer --version=1.10.16
+             ./composer install
 
       - name: Init DB and WP
         run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
