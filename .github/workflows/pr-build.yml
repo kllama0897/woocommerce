@@ -2,23 +2,23 @@ name: Build zip for PR
 on:
   pull_request
 jobs:
-  build:
-    name: Build zip for PR
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Build
-        id: build
-        uses: woocommerce/action-build@v2
-      - name: Upload PR zip
-        uses: actions/upload-artifact@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: woocommerce.zip
-          path: ${{ steps.build.outputs.zip_path }}
-          retention-days: 7
+#  build:
+#    name: Build zip for PR
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v2
+#      - name: Build
+#        id: build
+#        uses: woocommerce/action-build@v2
+#      - name: Upload PR zip
+#        uses: actions/upload-artifact@v2
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          name: woocommerce.zip
+#          path: ${{ steps.build.outputs.zip_path }}
+#          retention-days: 7
   test:
     name: PHP ${{ matrix.php }} unit tests
     needs: build
@@ -36,10 +36,10 @@ jobs:
         ports:
           - 3306:3306
     steps:
-      - name: Download ZIP
-        uses: actions/download-artifact@v2
-        with:
-          name: woocommerce.zip
+#      - name: Download ZIP
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: woocommerce.zip
       - name: Download WooCommcerce ZIP
         uses: actions/download-artifact@v2
         with:
@@ -49,4 +49,4 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Init DB and WP
-        run: ./tests/bin/install.sh woo_test root root localhost ${{ matrix.wp }}
+        run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
