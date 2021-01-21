@@ -39,6 +39,7 @@ jobs:
         with:
           name: woocommerce-dev
           retention-days: 1
+          path: ./
 #          
 #  test:
 #    name: PHP ${{ matrix.php }} WP ${{ matrix.wp }} unit tests
