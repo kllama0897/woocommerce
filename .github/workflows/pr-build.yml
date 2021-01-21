@@ -43,9 +43,9 @@ jobs:
 
       - name: Init DB and WP
         run: ./tests/bin/install.sh woo_test root root 127.0.0.1 ${{ matrix.wp }}
-        
-      - name: Install WooCommerce from build step
-        run: curl -s 
+
+#      - name: Install WooCommerce from build step
+#        run: curl -s 
 
       - name: Run tests
         uses: php-actions/phpunit@v2
