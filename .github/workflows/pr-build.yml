@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
 #        php: [ '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
-        php: [ '7.1' ]
+        php: [ '7.0' ]
         wp: [ "latest" ]
     services:
       database:
@@ -44,10 +44,10 @@ jobs:
       - name: Disable XDebug for performance increase
         run: |
              if [ -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini ]; then
-                phpenv config-rm xdebug.ini
-            else
-                echo "xdebug.ini does not exist"
-            fi
+               phpenv config-rm xdebug.ini
+             else
+               echo "xdebug.ini does not exist"
+             fi
 
 #      - name: Get cached composer directories
 #        uses: actions/cache@v2
