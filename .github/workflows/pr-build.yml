@@ -32,9 +32,6 @@ jobs:
           php_version: 7.2
           version: 2
 
-      - name: Dump autoload
-        run: composer dump-autoload
-        
       - name: Upload dev build
         uses: actions/upload-artifact@v2
         env:
